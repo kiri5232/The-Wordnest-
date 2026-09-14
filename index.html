@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wordnest — Where Stories Take Flight</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     👇👇👇  YAHAN APNA GMAIL ID DALEIN  (order confirmation isi email pe aayega) 👇👇👇
+     Neeche wale const OWNER_EMAIL ki value replace karke apna gmail address daal dena.
+     Example: const OWNER_EMAIL = "rahul123@gmail.com";
+     ============================================================ */
+
+  :root{
+    --wood:#241811;
+    --wood-2:#170f0a;
+    --paper:#f4e9d4;
+    --paper-dim:#e8dabb;
+    --ink:#241509;
+    --rust:#b0532b;
+    --rust-dark:#8a3f1f;
+    --gold:#c99a3e;
+    --line:rgba(244,233,212,0.18);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--wood);color:var(--paper);font-family:'Inter',sans-serif;}
+  h1,h2,h3,.display{font-family:'Fraunces',serif;}
+  a{color:inherit;text-decoration:none;}
+
+  /* background texture: bookshelf feel via layered gradients */
+  body{
+    background:
+      radial-gradient(1200px 700px at 15% -10%, rgba(201,154,62,0.08), transparent 60%),
+      repeating-linear-gradient(180deg, #1c130d 0 42px, #241a12 42px 84px),
+      var(--wood);
+  }
+
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 5%;
+    border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:40;
+    backdrop-filter:blur(6px);
+    background:rgba(23,15,10,0.55);
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:1.25rem;font-weight:600;letter-spacing:.02em;}
+  .brand .mark{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%, var(--gold), var(--rust-dark));display:flex;align-items:center;justify-content:center;font-size:14px;}
+  nav{display:flex;gap:32px;font-size:.95rem;color:var(--paper-dim);}
+  nav a{opacity:.85;transition:opacity .2s;}
+  nav a:hover{opacity:1;color:var(--gold);}
+  .head-right{display:flex;align-items:center;gap:22px;font-size:.9rem;}
+  .btn-ghost{padding:9px 18px;border:1px solid var(--line);border-radius:999px;font-size:.85rem;color:var(--paper-dim);}
+  .btn-solid{padding:9px 20px;border-radius:999px;background:linear-gradient(180deg,var(--rust),var(--rust-dark));color:#fff;font-weight:600;font-size:.85rem;border:none;cursor:pointer;}
+
+  /* HERO */
+  .hero{
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;
+    max-width:1180px;margin:0 auto;padding:80px 5% 60px;
+    align-items:center;
+  }
+  .kicker{color:var(--gold);font-size:.85rem;letter-spacing:.03em;margin-bottom:14px;}
+  .hero h1{font-size:clamp(2.6rem,6vw,4.4rem);line-height:1;margin:0 0 6px;font-weight:700;}
+  .rope-wrap{width:100%;max-width:520px;margin:2px 0 22px;cursor:pointer;}
+  .rope-wrap svg{width:100%;height:26px;display:block;overflow:visible;}
+  .hero p{color:var(--paper-dim);max-width:460px;line-height:1.7;margin:0 0 26px;font-size:1.02rem;}
+
+  /* Floating book with lens */
+  .book-stage{position:relative;display:flex;justify-content:center;align-items:center;height:460px;perspective:1000px;}
+  .book-wrap{
+    position:relative;width:270px;height:390px;
+    animation:float 5s ease-in-out infinite;
+    transform-style:preserve-3d;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0) rotate(-3deg);}
+    50%{transform:translateY(-18px) rotate(-1deg);}
+  }
+  .book-cover{
+    position:absolute;inset:0;border-radius:6px 10px 10px 6px;
+    background:
+      linear-gradient(120deg, rgba(255,255,255,0.06), transparent 40%),
+      linear-gradient(155deg, var(--rust) 0%, var(--rust-dark) 60%, #5c2712 100%);
+    box-shadow:0 30px 60px rgba(0,0,0,.55), inset -6px 0 12px rgba(0,0,0,.35), inset 3px 0 0 rgba(255,255,255,.08);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    padding:26px;overflow:hidden;
+  }
+  .book-cover::before{ /* spine highlight */
+    content:"";position:absolute;left:0;top:0;bottom:0;width:14px;
+    background:linear-gradient(90deg, rgba(0,0,0,.4), transparent);
+  }
+  .book-cover .emblem{width:64px;height:64px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px;color:var(--gold);}
+  .book-cover .title{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:600;color:var(--paper);}
+  .book-cover .sub{font-size:.72rem;letter-spacing:.12em;color:rgba(244,233,212,0.65);margin-top:8px;}
+
+  .book-inside{
+    position:absolute;inset:0;border-radius:6px 10px 10px 6px;
+    background:var(--paper);color:var(--ink);
+    padding:30px 24px;font-size:.8rem;line-height:1.65;
+    display:flex;flex-direction:column;justify-content:center;gap:10px;
+    clip-path:circle(0px at 50% 50%);
+    transition:clip-path .05s linear;
+  }
+  .book-inside h4{font-family:'Fraunces',serif;margin:0 0 4px;font-size:1rem;}
+  .lens-ring{
+    position:absolute;width:150px;height:150px;border-radius:50%;
+    border:3px solid var(--gold);
+    box-shadow:0 0 0 6px rgba(0,0,0,.15), 0 10px 25px rgba(0,0,0,.4);
+    pointer-events:none;opacity:0;transform:translate(-50%,-50%);
+    transition:opacity .15s;
+  }
+  .book-wrap:hover .lens-ring{opacity:1;}
+
+  /* CATALOG */
+  .catalog{max-width:1180px;margin:0 auto;padding:40px 5% 100px;}
+  .catalog h2{font-size:2rem;margin-bottom:6px;}
+  .catalog .lede{color:var(--paper-dim);margin:0 0 36px;max-width:520px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:26px;}
+  .card{
+    background:linear-gradient(180deg, rgba(244,233,212,0.05), rgba(244,233,212,0.02));
+    border:1px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;
+    transition:transform .25s, border-color .25s;
+  }
+  .card:hover{transform:translateY(-6px);border-color:var(--gold);}
+  .card .cover{
+    height:180px;border-radius:8px;margin-bottom:14px;
+    display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;
+    color:#fff;font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;
+    box-shadow:inset 0 0 30px rgba(0,0,0,.25), 0 12px 24px rgba(0,0,0,.35);
+  }
+  .card h3{font-size:1rem;margin:0 0 3px;}
+  .card .author{color:var(--paper-dim);font-size:.82rem;margin-bottom:8px;}
+  .card .price{color:var(--gold);font-weight:700;}
+
+  /* MODALS */
+  .overlay{
+    position:fixed;inset:0;background:rgba(10,6,3,0.7);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+  }
+  .overlay.show{display:flex;}
+  .modal{
+    background:var(--paper);color:var(--ink);border-radius:16px;max-width:460px;width:100%;
+    padding:30px;position:relative;max-height:88vh;overflow-y:auto;
+  }
+  .modal .close{position:absolute;top:16px;right:18px;font-size:1.3rem;cursor:pointer;color:#7a5f3e;background:none;border:none;}
+  .modal h3{font-family:'Fraunces',serif;font-size:1.4rem;margin:0 0 4px;}
+  .modal .author{color:#6b5236;margin-bottom:14px;}
+  .modal .specs{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.85rem;margin:16px 0;padding:14px;background:rgba(176,83,43,0.08);border-radius:10px;}
+  .modal .specs div span{display:block;color:#8a6f4a;font-size:.72rem;}
+  .modal p.desc{font-size:.92rem;line-height:1.6;color:#3a2a17;}
+  .modal .price-row{display:flex;justify-content:space-between;align-items:center;margin:18px 0;}
+  .modal .price-row .p{font-size:1.5rem;font-weight:700;color:var(--rust-dark);font-family:'Fraunces',serif;}
+  .buy-btn{width:100%;padding:13px;border:none;border-radius:10px;background:linear-gradient(180deg,var(--rust),var(--rust-dark));color:#fff;font-weight:700;font-size:.95rem;cursor:pointer;}
+
+  .form-group{margin-bottom:14px;}
+  .form-group label{display:block;font-size:.78rem;color:#6b5236;margin-bottom:5px;font-weight:600;}
+  .form-group input,.form-group textarea{
+    width:100%;padding:11px 12px;border-radius:8px;border:1px solid #d9c6a0;font-family:inherit;font-size:.9rem;background:#fffaf0;
+  }
+  .form-group textarea{resize:vertical;min-height:64px;}
+  .order-summary{background:rgba(176,83,43,0.1);border-radius:10px;padding:12px 14px;font-size:.85rem;margin-bottom:16px;}
+
+  .toast{
+    position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120%);
+    background:var(--gold);color:#241509;padding:14px 26px;border-radius:999px;font-weight:600;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);transition:transform .35s ease;z-index:200;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);}
+
+  footer{border-top:1px solid var(--line);padding:26px 5%;text-align:center;color:var(--paper-dim);font-size:.82rem;}
+
+  @media(max-width:860px){
+    .hero{grid-template-columns:1fr;padding-top:40px;}
+    .book-stage{height:340px;}
+    nav{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><span class="mark">📖</span> The Wordnest</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#collections">Collections</a>
+    <a href="#">Themes</a>
+    <a href="#">Authors</a>
+  </nav>
+  <div class="head-right">
+    <a href="#" class="btn-ghost">Log in</a>
+    <button class="btn-solid">Menu</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="kicker">Where Stories Take Flight — Home</div>
+    <h1>THE<br>WORDNEST</h1>
+    <div class="rope-wrap" id="ropeWrap">
+      <svg id="ropeSvg" viewBox="0 0 520 26" preserveAspectRatio="none">
+        <path id="ropePath" d="M0,13 L520,13" stroke="#c99a3e" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <p>Discover. Collect. Explore. Step into a sanctuary of words — a cozy haven of meticulously curated stories, tailored for comfort and curiosity.</p>
+    <button class="btn-solid" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'})">Explore more</button>
+  </div>
+
+  <div class="book-stage">
+    <div class="book-wrap" id="bookWrap">
+      <div class="book-cover">
+        <div class="emblem">🪶</div>
+        <div class="title">The Wordnest</div>
+        <div class="sub">A · COLLECTION · OF · TALES</div>
+      </div>
+      <div class="book-inside" id="bookInside">
+        <h4>Page 47 — On Reading</h4>
+        <p>"A book is a nest you build in someone else's mind, and every reader hatches it differently."</p>
+        <p style="color:#8a6f4a">Curated stories, bound with care, waiting for the right hands to open them.</p>
+      </div>
+      <div class="lens-ring" id="lensRing"></div>
+    </div>
+  </div>
+</section>
+
+<section class="catalog" id="collections">
+  <h2>Featured Story Threads</h2>
+  <p class="lede">Har kitaab par tap karke details dekhein aur seedha order karein.</p>
+  <div class="grid" id="bookGrid"></div>
+</section>
+
+<footer>© 2026 The Wordnest — Discover, Collect, Explore.</footer>
+
+<!-- BOOK DETAIL MODAL -->
+<div class="overlay" id="detailOverlay">
+  <div class="modal">
+    <button class="close" onclick="closeModal('detailOverlay')">✕</button>
+    <h3 id="dTitle"></h3>
+    <div class="author" id="dAuthor"></div>
+    <div class="specs" id="dSpecs"></div>
+    <p class="desc" id="dDesc"></p>
+    <div class="price-row"><span>Price</span><span class="p" id="dPrice"></span></div>
+    <button class="buy-btn" id="dBuyBtn">Buy this book</button>
+  </div>
+</div>
+
+<!-- ORDER FORM MODAL -->
+<div class="overlay" id="orderOverlay">
+  <div class="modal">
+    <button class="close" onclick="closeModal('orderOverlay')">✕</button>
+    <h3>Complete your order</h3>
+    <div class="order-summary" id="orderSummary"></div>
+    <form id="orderForm">
+      <div class="form-group"><label>Full name</label><input required name="Name" type="text" placeholder="Aapka naam"></div>
+      <div class="form-group"><label>Phone number</label><input required name="Phone" type="tel" placeholder="10-digit mobile number"></div>
+      <div class="form-group"><label>Delivery address</label><textarea required name="Address" placeholder="Poora address (house no, street, city, pincode)"></textarea></div>
+      <input type="hidden" name="Book" id="hidBook">
+      <input type="hidden" name="Price" id="hidPrice">
+      <input type="hidden" name="_subject" value="📚 New order — The Wordnest">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <button class="buy-btn" type="submit" id="placeOrderBtn">Place order</button>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   👇  YAHAN APNA GMAIL ID DALEIN — isi email pe order details aayenge  👇
+   ============================================================ */
+const OWNER_EMAIL = "yaha-apna-gmail@gmail.com"; // <-- ise apne gmail se replace karo
+
+/* ---------- BOOK DATA ---------- */
+const books = [
+  {title:"The Wordnest", author:"Maya Ashford", price:349, color:"linear-gradient(155deg,#b0532b,#5c2712)", pages:312, genre:"Anthology", lang:"English", desc:"A sanctuary of short stories about the quiet magic of reading — the book that inspired this store's name."},
+  {title:"Ashes of Winterfall", author:"Rohan Verma", price:299, color:"linear-gradient(155deg,#3a4a6b,#1a2233)", pages:284, genre:"Fantasy", lang:"Hindi", desc:"Ek bhula hua rajya, ek jalti hui bhavishyavani, aur ek ladki jo dono ko badalne nikli hai."},
+  {title:"Midnight Ledger", author:"Priya Kaul", price:399, color:"linear-gradient(155deg,#6b3a52,#2a1420)", pages:356, genre:"Thriller", lang:"English", desc:"A missing accountant, a city that never sleeps, and a ledger that hides more than numbers."},
+  {title:"Notes from a Small Kitchen", author:"Ila Bose", price:279, color:"linear-gradient(155deg,#5a6b3a,#242a14)", pages:198, genre:"Memoir", lang:"English", desc:"Recipes and reflections from a grandmother's kitchen, written for anyone who's ever cooked their way through grief."},
+  {title:"The Cartographer's Silence", author:"Dev Malhotra", price:329, color:"linear-gradient(155deg,#8a6b2b,#3a2a10)", pages:410, genre:"Mystery", lang:"English", desc:"A mapmaker disappears leaving behind maps of places that don't exist — yet."},
+  {title:"Chai Aur Kahaniyaan", author:"Anjali Sharma", price:249, color:"linear-gradient(155deg,#a0522d,#3a1f10)", pages:220, genre:"Short Stories", lang:"Hindi", desc:"Roz ki zindagi ke chhote, garmagaram kisse — ek cup chai ke saath padhne layak."},
+];
+
+const grid = document.getElementById('bookGrid');
+books.forEach((b,i)=>{
+  const card = document.createElement('div');
+  card.className='card';
+  card.innerHTML = `
+    <div class="cover" style="background:${b.color}">${b.title}</div>
+    <h3>${b.title}</h3>
+    <div class="author">${b.author}</div>
+    <div class="price">₹${b.price}</div>
+  `;
+  card.onclick = ()=>openDetail(i);
+  grid.appendChild(card);
+});
+
+let currentBook = null;
+
+function openDetail(i){
+  const b = books[i];
+  currentBook = b;
+  document.getElementById('dTitle').textContent = b.title;
+  document.getElementById('dAuthor').textContent = "by "+b.author;
+  document.getElementById('dSpecs').innerHTML = `
+    <div><span>Genre</span>${b.genre}</div>
+    <div><span>Language</span>${b.lang}</div>
+    <div><span>Pages</span>${b.pages}</div>
+    <div><span>Format</span>Paperback</div>
+  `;
+  document.getElementById('dDesc').textContent = b.desc;
+  document.getElementById('dPrice').textContent = "₹"+b.price;
+  document.getElementById('detailOverlay').classList.add('show');
+}
+document.getElementById('dBuyBtn').onclick = ()=>{
+  closeModal('detailOverlay');
+  document.getElementById('orderSummary').innerHTML = `Ordering <strong>${currentBook.title}</strong> by ${currentBook.author} — <strong>₹${currentBook.price}</strong>`;
+  document.getElementById('hidBook').value = currentBook.title;
+  document.getElementById('hidPrice').value = "₹"+currentBook.price;
+  document.getElementById('orderOverlay').classList.add('show');
+};
+
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('show'); });
+});
+
+/* ---------- ORDER SUBMIT (emails OWNER_EMAIL via FormSubmit) ---------- */
+document.getElementById('orderForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const btn = document.getElementById('placeOrderBtn');
+  btn.textContent = "Placing order...";
+  btn.disabled = true;
+  const data = new FormData(this);
+  try{
+    const res = await fetch(`https://formsubmit.co/ajax/${OWNER_EMAIL}`, {
+      method:'POST',
+      headers:{'Accept':'application/json'},
+      body:data
+    });
+    if(!res.ok) throw new Error('failed');
+    closeModal('orderOverlay');
+    this.reset();
+    showToast("Order confirm ho gaya! Details "+OWNER_EMAIL+" pe mail kar di gayi hai.");
+  }catch(err){
+    showToast("Kuch gadbad ho gayi — pehli baar FormSubmit use karne par apne gmail ka confirmation link click karna padta hai.");
+  }
+  btn.textContent = "Place order";
+  btn.disabled = false;
+});
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 4200);
+}
+
+/* ---------- LENS EFFECT ON FLOATING BOOK ---------- */
+const bookWrap = document.getElementById('bookWrap');
+const bookInside = document.getElementById('bookInside');
+const lensRing = document.getElementById('lensRing');
+bookWrap.addEventListener('mousemove', e=>{
+  const r = bookWrap.getBoundingClientRect();
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+  bookInside.style.clipPath = `circle(75px at ${x}px ${y}px)`;
+  lensRing.style.left = x+'px';
+  lensRing.style.top = y+'px';
+});
+bookWrap.addEventListener('mouseleave', ()=>{
+  bookInside.style.clipPath = 'circle(0px at 50% 50%)';
+});
+
+/* ---------- WAVY ROPE UNDERLINE (spring-chain simulation) ---------- */
+const ropeWrap = document.getElementById('ropeWrap');
+const ropePath = document.getElementById('ropePath');
+const N = 24;              // number of rope points
+const W = 520, BASE = 13;  // viewBox width & baseline y
+let points = Array.from({length:N}, (_,i)=>({x: i/(N-1)*W, y:BASE, vy:0}));
+let mouseX = null, mouseY = null;
+
+ropeWrap.addEventListener('mousemove', e=>{
+  const r = ropeWrap.getBoundingClientRect();
+  mouseX = (e.clientX - r.left) / r.width * W;
+  mouseY = (e.clientY - r.top) / r.height * 26;
+});
+ropeWrap.addEventListener('mouseleave', ()=>{ mouseX = null; mouseY = null; });
+
+function ropeStep(){
+  const stiffness = 0.12, damping = 0.90, pull = 0.35, radius = 90;
+  for(let i=1;i<N-1;i++){
+    const p = points[i];
+    // spring toward neighbors (keeps it rope-like)
+    const left = points[i-1].y, right = points[i+1].y;
+    const target = (left+right)/2;
+    let force = (target - p.y) * stiffness;
+    // pull toward baseline (rest state)
+    force += (BASE - p.y) * 0.01;
+    // mouse influence
+    if(mouseX!==null){
+      const dist = Math.abs(p.x - mouseX);
+      if(dist < radius){
+        const influence = 1 - dist/radius;
+        force += (mouseY - p.y) * pull * influence;
+      }
+    }
+    p.vy = (p.vy + force) * damping;
+    p.y += p.vy;
+  }
+  points[0].y = BASE; points[N-1].y = BASE;
+  let d = `M${points[0].x},${points[0].y}`;
+  for(let i=1;i<N;i++) d += ` L${points[i].x},${points[i].y}`;
+  ropePath.setAttribute('d', d);
+  requestAnimationFrame(ropeStep);
+}
+ropeStep();
+</script>
+</body>
+</html>
